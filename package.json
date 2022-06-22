@@ -1,0 +1,23 @@
+{
+  "name": "log-playback",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --mode=development",
+    "build": "npm run build:pro && npm run build:dev",
+    "build:pro": "mode=production webpack --config webpack.config.js --mode=production",
+    "build:dev": "mode=development webpack --config webpack.config.js --mode=development"
+  },
+  "author": "twosugarfish",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.9.2"
+  },
+  "dependencies": {
+    "rrweb": "^1.1.3"
+  }
+}
