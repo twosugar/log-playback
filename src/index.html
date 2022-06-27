@@ -1,38 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>测试模板</title>
-    <script src="./bundle.js"></script></head>
+    <script src="./log-record-error.js"></script>
+    <script src="./log-player.js"></script>
+    <script>
+        logConfig = {
+            reportUrl: "http://127.0.0.1:1337/log"
+        }
+    </script>
 </head>
+</head>
+
 <body>
-    <button onclick="fn()">抛出异常</button>
+    <div class="container">
+        <div class="btns">
+            <button onclick="fn()">抛出同步异常</button>
+            <button onclick="fn2()">抛出fetch请求异常</button>
+            <button onclick="fn3()">抛出异步异常</button>
+            <button onclick="fn4()">抛出promise异常</button>
+            <button onclick="fn5()">抛出资源加载异常</button>
+        </div>
+        <div class="video-content">
+            <div class="play-btn" onclick="getLogs()">播放最新的日志录屏</div>
+            <div id="error-messge"></div>
+            <div id="video"></div>
+        </div>
+    </div>
 </body>
+<style>
+    .container {
+        display: flex;
+    }
+
+    #video {
+        height: 700px;
+        width: 1100px;
+    }
+
+    button {
+        margin-top: 20px;
+    }
+
+    .play-btn {
+        margin-top: 20px;
+        cursor: pointer;
+        color: red;
+        text-decoration: underline;
+    }
+</style>
 <script>
+    var player = null
+    const getLogs = () => {
+        player = null
+        document.getElementById('video').innerHTML = ''
+        fetch('http://127.0.0.1:1337/getErrorLog', {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                mode: "cors",
+            })
+            .then(res => res.json())
+            .then(res => {
+                const rrwebData = res?.data?.rrwebData ? JSON.parse(res?.data?.rrwebData) : {}
+                console.log(9999, rrwebData)
+                const dom = document.getElementById('video')
+                const message = res?.data?.errorMessage
+                document.getElementById('error-messge').innerText = message
+                player = new rrwebPlayer({
+                    target: dom, // 可以自定义 DOM 元素
+                    // 配置项
+                    props: {
+                        width: dom.clientWidth,
+                        height: dom.clientHeight,
+                        events: rrwebData.res,
+                    },
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
     const fn = () => {
-        throw new Error('测试错误')
-        // fetch("http://localhost:8088/bundle2.js", {
-        //     "headers": {
-        //         "accept": "*/*",
-        //         "accept-language": "zh-CN,zh;q=0.9",
-        //         "cache-control": "no-cache",
-        //         "pragma": "no-cache",
-        //         "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"102\", \"Google Chrome\";v=\"102\"",
-        //         "sec-ch-ua-mobile": "?0",
-        //         "sec-ch-ua-platform": "\"macOS\"",
-        //         "sec-fetch-dest": "script",
-        //         "sec-fetch-mode": "no-cors",
-        //         "sec-fetch-site": "same-origin"
-        //     },
-        //     "referrer": "http://localhost:8088/",
-        //     "referrerPolicy": "strict-origin-when-cross-origin",
-        //     "body": null,
-        //     "method": "GET",
-        //     "mode": "cors",
-        //     "credentials": "include"
-        // })
+        throw new Error('同步异常')
+    }
+
+    const fn2 = () => {
+        fetch("http://localhost:8088/bundle2.js", {
+            "headers": {
+                "accept": "*/*",
+                "accept-language": "zh-CN,zh;q=0.9",
+                "cache-control": "no-cache",
+                "pragma": "no-cache",
+                "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"102\", \"Google Chrome\";v=\"102\"",
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": "\"macOS\"",
+                "sec-fetch-dest": "script",
+                "sec-fetch-mode": "no-cors",
+                "sec-fetch-site": "same-origin"
+            },
+            "referrer": "http://localhost:8088/",
+            "referrerPolicy": "strict-origin-when-cross-origin",
+            "body": null,
+            "method": "GET",
+            "mode": "cors",
+            "credentials": "include"
+        })
+    }
+
+    const fn3 = () => {
+        setTimeout(() => {
+            throw new Error('异步异常')
+        }, 200);
+    }
+
+    const fn4 = () => {
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                reject('Promise 异常')
+            }, 200);
+        })
+    }
+
+    const fn5 = () => {
+        const Script = document.createElement("script");
+        Script.setAttribute("type", "text/javascript");
+        Script.setAttribute(
+            "src",
+            "https://cdn.jsdelivr.net/npm/rrweb-player@latest/dist/index-error22.js"
+        );
+        document.head.insertBefore(Script, document.head.lastChild);
     }
 </script>
+
 </html>

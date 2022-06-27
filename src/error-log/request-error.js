@@ -2,14 +2,14 @@
  * @Description: fetch 和 xhr 拦截
  * @Date: 2022-06-23 18:52:34
  * @FilePath: /log-playback/src/error-log/request-error.js
- * @LastEditTime: 2022-06-24 18:37:13
+ * @LastEditTime: 2022-06-27 19:48:48
  */
 
 function listenAndOverwriteFetch() {
   var oldFetch = window.fetch;
-  window.fetch = () => {
-    return oldFetch
-      .apply(this, arguments)
+  
+  window.fetch = (url, options) => {
+    return oldFetch(url, options)
       .then(function (res) {
         if (!res.ok) {
           throw new Error(
@@ -28,11 +28,11 @@ function listenAndOverwriteFetch() {
 function initXMLHttpRequest() {
   const http = {
     request: function (param) {
-      console.log("request");
+      // console.log("request");
       //   console.log(param, "---request");
     },
     response: function (res) {
-      console.log(res, "---response");
+      // console.log(res, "---response");
       const config = res.config ?? {}
       if (res?.config?.status !== 200) {
         throw new Error(`Request Error: ${config.method} ${config.url} status:${config.status}`);

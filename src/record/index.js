@@ -1,8 +1,8 @@
 /*
- * @Description:
+ * @Description: 记录
  * @Date: 2022-06-24 17:07:17
  * @FilePath: /log-playback/src/record/index.js
- * @LastEditTime: 2022-06-24 19:07:18
+ * @LastEditTime: 2022-06-27 17:51:11
  */
 
 // import * as rrweb from "rrweb";
@@ -30,45 +30,9 @@ class Record {
     });
   }
 
-  insertVideoPlayerScript() {
-    return new Promise((resolve, reject) => {
-      const Script = document.createElement("script");
-      Script.setAttribute("type", "text/javascript");
-      Script.setAttribute(
-        "src",
-        "https://cdn.jsdelivr.net/npm/rrweb-player@latest/dist/index.js"
-      );
-      document.head.insertBefore(Script, document.head.lastChild);
-      Script.onload = () => {
-        resolve();
-      };
-      Script.onerror = () => {
-        reject(`rrweb player onload err`);
-      };
-    });
-  }
-
-  insertVideoCss() {
-    return new Promise((resolve, reject) => {
-      const Link = document.createElement("link");
-      Link.setAttribute("rel", "stylesheet");
-      Link.setAttribute(
-        "href",
-        "https://cdn.jsdelivr.net/npm/rrweb-player@latest/dist/style.css"
-      );
-      document.head.insertBefore(Link, document.head.lastChild);
-      Link.onload = () => {
-        resolve();
-      };
-      Link.onerror = () => {
-        reject(`rrweb css onload err`);
-      };
-    });
-  }
-
   async startRecording() {
     await this.insertRecordScript();
-    if (!rrwebRecord) {
+    if (!window.rrwebRecord) {
       return;
     }
     rrwebRecord({
@@ -98,18 +62,6 @@ class Record {
       events = this.eventsMatrix[0];
     }
     return events;
-  }
-
-  async playVideo(events) {
-    await Promise.all([this.insertVideoPlayerScript(), this.insertVideoCss()]);
-    const replayer = new rrwebPlayer({
-      target: document.body, // 可以自定义 DOM 元素
-      // 配置项
-      props: {
-        events,
-      },
-    });
-    replayer.play();
   }
 }
 
