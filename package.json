@@ -2,7 +2,7 @@
   "name": "log-playback",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/log-record-error.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --mode=development & npm run server",
@@ -10,7 +10,7 @@
     "build": "npm run build:pro",
     "build:pro": "mode=production webpack --config webpack.config.js --mode=production"
   },
-  "author": "twosugarfish",
+  "author": "https://github.com/twosugar",
   "license": "ISC",
   "devDependencies": {
     "body-parser": "^1.20.0",
