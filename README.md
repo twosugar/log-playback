@@ -24,7 +24,7 @@
 ```
 <script src="https://cdn.jsdelivr.net/npm/log-playback@latest/dist/log-player.js"></script>
 ```
-录屏回放API, 已默认引入了回放需要的css,不需要额外因日,参考roweb回放部分: https://github.com/rrweb-io/rrweb/blob/master/guide.zh_CN.md#%E5%9B%9E%E6%94%BE
+录屏回放API, 已默认引入了回放需要的css, 不需要额外引入, 参考roweb回放部分: https://github.com/rrweb-io/rrweb/blob/master/guide.zh_CN.md#%E5%9B%9E%E6%94%BE
 
 ### 示例Demo
 
